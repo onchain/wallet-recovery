@@ -1,11 +1,11 @@
-Coinbase Multisig Vault recovery tool
+Multisig Wallet recovery tool
 ============================
 
-You can use this open source tool to send all the coins from your Coinbase Multisig Vault to any bitcoin address you choose.
+You can use this open source tool to send all the coins from your Multi Sig Paper Backupt to any bitcoin address you choose.
 
-In order to do this you will need the data from your vault backup that you either printed out or saved somewhere.
+In order to do this you will need the data from your wallet backup that you either printed out or saved somewhere.
 
-http://coinbase.github.io/multisig-tool
+http://onchain.github.io/wallet-recovery
 
 ## Usage
 
@@ -14,9 +14,8 @@ http://coinbase.github.io/multisig-tool
 To complete this recovery process, you will need the following information:
 
 * 3 extended public keys (xpubkeys)
-* User seed
-* Shared encrypted seed
-* Your vault password
+* 2 BIP38 Keys
+* Your wallet passphrase
 
 ### Online/Offline
 
@@ -48,7 +47,7 @@ One alternative is to run Chrome with the `--allow-access-from-files` parameter.
 
 This tool was designed to have a minimal code foot print so it could be easily auditable.
 
-All the domain specific crypto is done in [`multisig.js`](https://github.com/coinbase/multisig-tool/blob/master/multisig/multisig.js).
+All the domain specific crypto is done in [`multisig.js`](https://github.com/onchain/wallet-recovery/blob/master/multisig/multisig.js).
 
 Everything else is either UI code or dependency libraries.
 
@@ -72,24 +71,4 @@ We used this command to build the [`lib/bitcoinjs.js`](https://github.com/coinba
 
 We use the [BIP38](https://github.com/cryptocoinjs/bip38) library to decrypt the encrypted shared key seeds.
 
-To build the [`multisig/bip38.js`](https://github.com/coinbase/multisig-tool/blob/master/multisig/bip38.js) we used:
 
-1. Install packages with `npm`:
-
-    `npm install bip38 crypto-browserify --save`
-
-2. Use `browserify` to resolve dependencies:
-
-    `browserify -r bip38 -s Bip38 > multisig/bip38.js`
-
-Then we [amend](https://github.com/coinbase/multisig-tool/commit/f8bbcb87ec50dc9414ca10e18c9fc0a8f4737322) the `multisig/bip38.js` to support progress callbacks and Web Worker messages handling.
-
-## Improvements missing
-
-1. There is currently no error checking whatsoever. That means the tool won't let you know if something is wrong with your input or with anything else. It will just silently stop working.
-
-2. There is also currently no support for **group vaults**. 
-
-3. At the moment if your highest HD index is more than 12, it won't be able to fetch the unspent outputs, because of API limitations.
-
-We plan to tackle those issues soon, but we do accept community contributions as well. So if you have a solution for some of these, please submit a pull request!
