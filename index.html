@@ -16,6 +16,7 @@
         }
         var proceed = function(button, next_step_id) {
           $(button).parents('footer').hide();
+		  $('.step').hide();
           $(next_step_id).show();
         }
 
@@ -89,7 +90,7 @@
               user: cleanInput($('.user .key').val())
             },
             // BIP38 decryption progress method.
-            onProgress: function(percent) {
+            onProgress1: function(percent) {
               var cur_percent = Math.ceil(percent);
               if (cur_percent == percent) return;
               if (cur_percent > 0) $('.decrypt_progress').show();
@@ -100,8 +101,17 @@
             onReady: function() {
               $('.fees_btc').text(Multisig.app.tx.getMinerFee());
               $('.total_btc').text(Multisig.app.tx.getDestinationAmount());
-              $('.raw code').text(Multisig.app.tx.transaction.toHex());
-              proceed(button, '#step_3');
+              $('.raw').val(Multisig.app.tx.transaction.toHex());
+			  proceed(button, '#step_3');
+            },
+            // BIP38 decryption progress method.
+            onProgress2: function(percent) {
+              var cur_percent = Math.ceil(percent);
+              if (cur_percent == percent) return;
+              if (cur_percent > 0) $('.decrypt_progress2').show();
+              else if (cur_percent == 100) $('.decrypt_progress2').hide();
+              percent = cur_percent;
+              $('#decrypt_percent2').text(percent);
             }
           })
         })
@@ -121,16 +131,16 @@
       <div id="step_1" class="step">
         <header>
           <h2>Step 1</h2>
-          <p>Let's find all of your vault addresses that have some bitcoins in them.</p>
+          <p>Let's generate your wallet addresses.</p>
         </header>
         <div class="xpubkeys">
-          <p>Please enter the extended public keys (xpubkeys) for your multisig vault.</p>
-          <textarea id="xpubkey1" class="xpubkey key" placeholder="xpub...">xpub661MyMwAqRbcEnYXZXcsswQHdgPM56Z5XmLVSWpF5wVtos76kPEjEQgB
-sd6DhKRPt9F664DeecMscS8aDTyrKMVq5ef3CPkPWBcYkPgjux2</textarea>
-          <textarea id="xpubkey2" class="xpubkey key" placeholder="xpub...">xpub661MyMwAqRbcEkskgYT6cpvJvVRTeb7q8nH18EEZdaY2eH666fs8gdy4
-WkdbQpcj4r5iNDXZiLhbD3ebrKDKiVt9NHxhsNsMzYEH3NzucCa</textarea>
-          <textarea id="xpubkey3" class="xpubkey key" placeholder="xpub...">xpub661MyMwAqRbcGbnj2QkdikWA44PeUPs8eHXNk5Ywf7nFv2WgbiNTQZQh
-cp5brAnwYbaTcvYeW5rof5G58z8eBDV5BNKohJCQKzahjcTptnt</textarea>
+          <p>Please enter the extended public keysfor your wallet.</p>
+          <p>Your Public Key (Key #1)</p>
+          <textarea id="xpubkey1" class="xpubkey key" style="width: 90%" placeholder="xpub...">xpub661MyMwAqRbcGbHQE3MmP67WPXLvLLWKSahfE7u9jm3CdU7PWBnSCGyeh1FD7NQ27CTWRRAzvtnTG7ChEBv8DTchpLyFZy4NCg9Qe91td83</textarea>
+          <p>Your Backup Public Key (Key #2)</p>
+          <textarea id="xpubkey2" class="xpubkey key" style="width: 90%" placeholder="xpub...">xpub661MyMwAqRbcG79b8ibaRpVorfiJbc5yQf1sz1pbKeMAZhX9UnoExKdffo5U3URtYcViutVAV6Hm1wAMygekKAQK3UPLSZbuWXaQpbtTBKt</textarea>
+          <p>Your providers Key (Key #3)</p>
+          <textarea id="xpubkey3" class="xpubkey key" style="width: 90%" placeholder="xpub...">xpub661MyMwAqRbcGbnj2QkdikWA44PeUPs8eHXNk5Ywf7nFv2WgbiNTQZQhcp5brAnwYbaTcvYeW5rof5G58z8eBDV5BNKohJCQKzahjcTptnt</textarea>
         </div>
         <div class="max_index">
           <p>Please enter the highest HD index to check for balance.</p>
@@ -145,26 +155,33 @@ cp5brAnwYbaTcvYeW5rof5G58z8eBDV5BNKohJCQKzahjcTptnt</textarea>
         <header>
           <h2>Step 2</h2>
           <p>
-            Now enter the key backups that you saved when creating the vault.
+            Now enter the key backups from your backup PDF document.
             <br>
             <small>Protip: you can now safely go offline if you'd like.</small>
           </p>
         </header>
-        <div class="seed shared">
+        <div class="shared">
           <label>
-            Shared encrypted seed
-            <small class="decrypt_progress">Decrypting ... <strong><span id="decrypt_percent">0</span>%</strong></small>
+            Your Encrypted Private Key(BIP38 Format)
           </label>
-          <textarea id="shared_seed" class="key"></textarea>
-          <input type="password" class="password" placeholder="Enter your vault password">
+			<br />
+            <small class="decrypt_progress">Decrypting ... <strong><span id="decrypt_percent">0</span>%</strong></small>
+			<br />
+          <textarea id="shared_seed" style="width: 90%" class="key">6PRM1sAkLs71m8MqAvoxdGck95iSBnWMN5mZmpomPdRSazUhiLE3Pk9RPL</textarea>
+			<br />
+          <input type="password" class="password" value="swirl work everybody breathe approach rather" placeholder="Enter your vault password">
         </div>
-        <div class="seed user">
-          <label>User seed</label>
-          <textarea id="user_seed" class="key"></textarea>
+        <div class="user">
+          <label>Your Backup Encrypted Private Key(BIP38 Format)
+		 </label>
+			<br />
+            <small class="decrypt_progress2">Decrypting ... <strong><span id="decrypt_percent2">0</span>%</strong></small>
+			<br />
+          <textarea id="user_seed" style="width: 90%" class="key">6PRWLctRAowdiiCR6Zto71EYpiBm5aWSUW8M5Ju7va6sqi6jJCbRVkNrUa</textarea>
         </div>
         <div class="destination_address">
           <label>And decide where you want the bitcoins to be sent to</label>
-          <input id="destination_address" type="text" class="key" placeholder="Enter a bitcoin address">
+          <input id="destination_address" type="text" class="key" placeholder="Enter a bitcoin address" value="1STRonGxnFTeJiA7pgyneKknR29AwBM77">
         </div>
         <div class="fees">
           <label>What would you like the fee to be</label>
@@ -180,11 +197,7 @@ cp5brAnwYbaTcvYeW5rof5G58z8eBDV5BNKohJCQKzahjcTptnt</textarea>
           <h2>Step 3</h2>
           <p>Now you can copy the raw transaction and paste it into any bitcoin client to be broadcast to the network.</p>
         </header>
-        <div class="raw">
-          <pre><code>
-            Your transaction will appear here in raw hex format ...
-          </code></pre>
-        </div>
+		<textarea class="raw" style="width:90%">Your transaction will appear here in raw hex format ...</textarea>
       </div>
     </div>
     <div id="transaction">
