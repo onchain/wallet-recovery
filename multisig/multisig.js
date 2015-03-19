@@ -98,7 +98,7 @@
   }
   Multisig.Address.prototype = {
     getPrvKey: function(node) {
-      return node.derive(this.index).privKey;
+      return node.derive(0).derive(this.index).privKey;
     },
     comparePubKeys: function(a, b) {
       if (a.toHex() < b.toHex()) return -1;
@@ -167,7 +167,7 @@
     },
     generateHdWallet: function(seed_or_xprvkey) {
       // Dealing with a seed.
-      if (seed_or_xprvkey.match(/^(L|K)[a-zA-Z0-9]*$/)) {
+      if (seed_or_xprvkey.match(/^(5|L|K)[a-zA-Z0-9]*$/)) {
         var key = Bitcoin.ECKey.fromWIF(seed_or_xprvkey);
         return Bitcoin.HDNode.fromSeedBuffer(key.d.toBuffer());
       }
@@ -190,12 +190,12 @@
 
       // Generate a random thing to sign.
       var hash = new Buffer.Buffer(32);
-      window.crypto.getRandomValues(hash);
 
       $.each(this.inputAddresses, function(address_index, address) {
         // The signatures need to be in the same order as the
         // public keys were when creating the P2SH address.
         $.each(address.pubkeys, function(pubkey_index, pubkey) {
+		
           $.each(that.hdWallets, function(hd_index, hd) {
             // Get the private key for this address.
             var prvkey = address.getPrvKey(hd);
@@ -288,9 +288,7 @@
         addresses: this.addresses,
         minerFee: options.minerFee,
         destinationAddress: options.destinationAddress,
-        seeds: {
-          user: options.seeds.user
-        }
+        seeds: {}
       });
 
       this.tx.onReady = options.onReady;
@@ -301,14 +299,27 @@
 
       // Decrypt shared key.
       var worker = new Multisig.Bip38Worker({
-        decrypt_done: this.finishBuildTransaction.bind(this),
-        decrypt_working: options.onProgress
+        decrypt_done: this.checkIfFinished.bind(this),
+        decrypt_working: options.onProgress1
       });
       worker.decrypt(options.seeds.shared, options.seeds.shared_password);
+	  
+      var worker = new Multisig.Bip38Worker({
+        decrypt_done: this.checkIfFinished.bind(this),
+        decrypt_working: options.onProgress2
+      });
+      worker.decrypt(options.seeds.user, options.seeds.shared_password);
     },
-    finishBuildTransaction: function(shared_seed) {
-      // Use the just decrypted seed.
-      this.tx.seeds.shared = shared_seed;
+    checkIfFinished: function(shared_seed) {
+		if(! this.tx.seeds.shared)
+			this.tx.seeds.shared = shared_seed;
+		else if(! this.tx.seeds.user)
+			this.tx.seeds.user = shared_seed;
+		
+		if(this.tx.seeds.user && this.tx.seeds.shared)	
+			this.finishBuildTransaction();
+	},
+    finishBuildTransaction: function() {
 
       // Sign transaction.
       this.tx.signInputs();
