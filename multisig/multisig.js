@@ -98,7 +98,7 @@
   }
   Multisig.Address.prototype = {
     getPrvKey: function(node) {
-      return node.derive(0).derive(this.index).privKey;
+      return node.derive(1).derive(this.index).privKey;
     },
     comparePubKeys: function(a, b) {
       if (a.toHex() < b.toHex()) return -1;
@@ -202,10 +202,13 @@
 
             // Sign the random hash to see if the current private key corresponds to the current public key.
             var sig = prvkey.sign(hash);
-            if (!pubkey.verify(hash, sig)) return;
+            if (!pubkey.verify(hash, sig)) {
+				return;
+			} else {
 
-            // If it does, to the actual signing.
-            that.tb.sign(address_index, prvkey, address.redeemScript);
+				// If it does, to the actual signing.
+				that.tb.sign(address_index, prvkey, address.redeemScript);
+			}
           })
         })
       })
@@ -245,12 +248,11 @@
         
         var pubkeysForIndex = []
         
+        pubkeysForIndex.push(masterNodes[2].pubKey)
         pubkeysForIndex.push(masterNodes[0].derive(1).derive(index).pubKey)
         pubkeysForIndex.push(masterNodes[1].derive(1).derive(index).pubKey)
-        pubkeysForIndex.push(masterNodes[2].pubKey)
         addresses.push(new Multisig.Address(index, pubkeysForIndex));
       }
-
       return addresses;
     },
     getUnspentOutputs: function(callback) {
