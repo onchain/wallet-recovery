@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Multisig Wallet recovery tool</title>
+    <title>CarbonWallet recovery tool</title>
     <link rel="stylesheet" href="css/multisig.css">
 
     <script type="text/javascript" src="lib/jquery-2.1.1.min.js"></script>
@@ -120,11 +120,11 @@
   </head>
   <body>
     <header>
-      <h1>Multisig Wallet recovery tool</h1>
+      <h1>CarbonWallet recovery tool</h1>
       <small>
-        <a href="https://github.com/coinbase/multisig-tool">Source code</a>
+        <a href="https://github.com/onchain/wallet-recovery">Source code</a>
         |
-        <a href="https://github.com/coinbase/multisig-tool/blob/master/README.md">Instructions</a>
+        <a href="https://github.com/onchain/wallet-recovery/blob/master/README.md">Instructions</a>
       </small>
     </header>
     <div id="steps">
@@ -136,11 +136,11 @@
         <div class="xpubkeys">
           <p>Please enter the extended public keysfor your wallet.</p>
           <p>Your Public Key (Key #1)</p>
-          <textarea id="xpubkey1" class="xpubkey key" style="width: 90%" placeholder="xpub...">xpub661MyMwAqRbcGbHQE3MmP67WPXLvLLWKSahfE7u9jm3CdU7PWBnSCGyeh1FD7NQ27CTWRRAzvtnTG7ChEBv8DTchpLyFZy4NCg9Qe91td83</textarea>
+          <textarea id="xpubkey1" class="xpubkey key" style="width: 90%" placeholder="xpub...">xpub661MyMwAqRbcGZWWrGkxjcmCw9GkC154mF2KqAKwv3k7MRPhuMBuC1BtPyhKU5TcuJ1syrrEecE2zMdcMyb7Fpk1xE1dqN2zwMrbxB1f7qe</textarea>
           <p>Your Backup Public Key (Key #2)</p>
-          <textarea id="xpubkey2" class="xpubkey key" style="width: 90%" placeholder="xpub...">xpub661MyMwAqRbcG79b8ibaRpVorfiJbc5yQf1sz1pbKeMAZhX9UnoExKdffo5U3URtYcViutVAV6Hm1wAMygekKAQK3UPLSZbuWXaQpbtTBKt</textarea>
+          <textarea id="xpubkey2" class="xpubkey key" style="width: 90%" placeholder="xpub...">xpub661MyMwAqRbcFuskdyHUu4Vt2JBu1oKXQP4Z1srJamcs8gHA1MwHBtGsYAoBGHMBy9dsJadNe4UvzHR8dAjN66VjbjEwHX2t4B3L1r18HG6</textarea>
           <p>Your providers Key (Key #3)</p>
-          <textarea id="xpubkey3" class="xpubkey key" style="width: 90%" placeholder="xpub...">xpub661MyMwAqRbcGbnj2QkdikWA44PeUPs8eHXNk5Ywf7nFv2WgbiNTQZQhcp5brAnwYbaTcvYeW5rof5G58z8eBDV5BNKohJCQKzahjcTptnt</textarea>
+          <textarea id="xpubkey3" class="xpubkey key" style="width: 90%" placeholder="xpub...">xpub67wqP6Ua22JvhPmN8KUE2CdtKzzdvsuQTXGSDZjsZQPUnJuKa6fgQoSbs2bDaadH3agMVBjriynGKLU4hEkLkLcRrUyGVCTJQkRx6Vs6MhJ</textarea>
         </div>
         <div class="max_index">
           <p>Please enter the highest HD index to check for balance.</p>
@@ -167,9 +167,9 @@
 			<br />
             <small class="decrypt_progress">Decrypting ... <strong><span id="decrypt_percent">0</span>%</strong></small>
 			<br />
-          <textarea id="shared_seed" style="width: 90%" class="key">6PRM1sAkLs71m8MqAvoxdGck95iSBnWMN5mZmpomPdRSazUhiLE3Pk9RPL</textarea>
+          <textarea id="shared_seed" style="width: 90%" class="key">6PYRWpYceNYwgpok9kvJMjuq392N7zPkj2sntRoDMoWcec1VQqQ6HKS6TA</textarea>
 			<br />
-          <input type="password" class="password" value="swirl work everybody breathe approach rather" placeholder="Enter your vault password">
+          <input type="password" class="password" placeholder="Enter your passphrase">
         </div>
         <div class="user">
           <label>Your Backup Encrypted Private Key(BIP38 Format)
@@ -177,7 +177,7 @@
 			<br />
             <small class="decrypt_progress2">Decrypting ... <strong><span id="decrypt_percent2">0</span>%</strong></small>
 			<br />
-          <textarea id="user_seed" style="width: 90%" class="key">6PRWLctRAowdiiCR6Zto71EYpiBm5aWSUW8M5Ju7va6sqi6jJCbRVkNrUa</textarea>
+          <textarea id="user_seed" style="width: 90%" class="key">6PYL8ftt1U9VJzfFbcXrarmpSznPTcKDeGx52afphBGz42k8j94p3RnnDe</textarea>
         </div>
         <div class="destination_address">
           <label>And decide where you want the bitcoins to be sent to</label>
