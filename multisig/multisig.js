@@ -245,8 +245,8 @@
         
         var pubkeysForIndex = []
         
-        pubkeysForIndex.push(masterNodes[0].derive(0).derive(index).pubKey)
-        pubkeysForIndex.push(masterNodes[1].derive(0).derive(index).pubKey)
+        pubkeysForIndex.push(masterNodes[0].derive(1).derive(index).pubKey)
+        pubkeysForIndex.push(masterNodes[1].derive(1).derive(index).pubKey)
         pubkeysForIndex.push(masterNodes[2].pubKey)
         addresses.push(new Multisig.Address(index, pubkeysForIndex));
       }
